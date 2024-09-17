@@ -4,6 +4,7 @@ import com.lowdragmc.lowdraglib.LDLib;
 import com.lowdragmc.lowdraglib.gui.ingredient.IGhostIngredientTarget;
 import com.lowdragmc.lowdraglib.gui.ingredient.Target;
 
+import mezz.jei.api.ingredients.ITypedIngredient;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +33,7 @@ public interface IGhostItemTarget extends IGhostIngredientTarget {
             return Collections.emptyList();
         } else {
             final Rect2i rectangle = getRectangleBox();
-            return Lists.newArrayList(new Target[] { new Target() {
+            return Lists.newArrayList(new Target[]{new Target() {
 
                 @NotNull
                 public Rect2i getArea() {
@@ -46,7 +47,7 @@ public interface IGhostItemTarget extends IGhostIngredientTarget {
                         acceptItem(stack);
                     }
                 }
-            } });
+            }});
         }
     }
 
@@ -57,6 +58,10 @@ public interface IGhostItemTarget extends IGhostIngredientTarget {
             if (ingredient instanceof ItemStack itemStack) {
                 itemStack.setTag(itemEmiStack.getNbt());
             }
+        }
+
+        if (LDLib.isJeiLoaded() && ingredient instanceof ITypedIngredient<?> itemJeiStack) {
+            ingredient = itemJeiStack.getItemStack().orElse(null);
         }
         return ingredient;
     }

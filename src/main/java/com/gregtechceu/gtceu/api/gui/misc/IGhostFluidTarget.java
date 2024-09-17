@@ -35,7 +35,7 @@ public interface IGhostFluidTarget extends IGhostIngredientTarget {
             return Collections.emptyList();
         } else {
             final Rect2i rectangle = getRectangleBox();
-            return Lists.newArrayList(new Target[] { new Target() {
+            return Lists.newArrayList(new Target[]{new Target() {
 
                 @NotNull
                 public Rect2i getArea() {
@@ -56,7 +56,7 @@ public interface IGhostFluidTarget extends IGhostIngredientTarget {
                         acceptFluid(ingredientStack);
                     }
                 }
-            } });
+            }});
         }
     }
 
@@ -69,6 +69,10 @@ public interface IGhostFluidTarget extends IGhostIngredientTarget {
             Fluid fluid = fluidEmiStack.getKeyOfType(Fluid.class);
             ingredient = fluid == null ? FluidStack.empty() :
                     FluidStack.create(fluid, fluidEmiStack.getAmount(), fluidEmiStack.getNbt());
+        }
+
+        if (LDLib.isJeiLoaded() && ingredient instanceof net.minecraftforge.fluids.FluidStack fluidStack) {
+            ingredient = FluidStack.create(fluidStack.getFluid(), fluidStack.getAmount(), fluidStack.getTag());
         }
         return ingredient;
     }
